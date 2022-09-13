@@ -28,8 +28,10 @@ plan(multisession, workers =nworkers)
 star <- readRDS("/Users/alana/Dropbox/research/research projects/ITR/code/causal-ml/data/star/star.rds")
 
 outcomes <- c("g3tlangss")
-# outcomes <- c("g3tlangss",
-#                 "g3treadss","g3tmathss")
+outcomes <- c("g3tlangss",
+                "g3treadss","g3tmathss")
+
+which("g3treadss" == outcomes)
 
 covariates <-  star %>% dplyr::select(-c(all_of(outcomes),"treatment")) %>% colnames()
 
@@ -51,26 +53,11 @@ fit_star <- run_itr(outcome = outcomes,
 
 class(fit_star)
 
-# fit_star$qoi[[1]]$AUPEC %>%
-#   map(.,~as_tibble(.)) %>%
-#   bind_rows() 
-  
-# fit_star$qoi[[1]]$AUPEC %>%
-#   {{temp <<-.}} %>%
-#   map(., ~.x$outputdf$type %>% unique)
 
-# get PAPE estimates
-summary(fit_star, 1, type = "PAPE")
+# get estimates
+summary(fit_star)
 
-# get PAPE estimates
-summary(fit_star, 1, type = "PAPEp")
-
-# get PAPDp estimates
-summary(fit_star, 1, type = "PAPDp")
-
-# get AUPEC estimates
-summary(fit_star, 1, type = "AUPEC")
-
+# plot aupec
 plot(x = fit_star, 
       outcome = outcomes[1],
       treatment = "treatment",
