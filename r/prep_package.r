@@ -37,61 +37,39 @@ star_new <- star %>%
 
 covariates <-  star %>% dplyr::select(-c(all_of(outcomes),"treatment")) %>% colnames()
 
-fit_star <- run_itr(outcome = "g3tlangss_binary",
+fit_star <- run_itr(outcome = "g3tlangss",
                treatment = "treatment",
                covariates = covariates,
-               data = star_new,
+               data = star,
                algorithms = c(
-                  # "causal_forest", 
+                  "causal_forest", 
                   # "bart",
                   # "svm",
-                  # "lasso",
+                  "lasso",
                   # "boost", 
                   # "random_forest",
                   # "bagging",
                   "cart"),
                plim = 0.2,
-               n_folds = 3)
-
-debugonce(compute_qoi)
-debugonce(run_itr)
-
-outcome = vector()
-
-predict_outcome = predict(fit, kyphosis)
-
-convert_outcome <- function(x, predict_outcome){
-  if(predict_outcome[x,1] >= 0.5){
-  outcome[x] = colnames(predict_outcome)[1] %>% as.numeric()
-}else {
-   outcome[x] = colnames(predict_outcome)[2] %>% as.numeric()
-}
-}
-
-sapply(seq(1:nrow(predict_outcome)),convert_outcome, predict_outcome = predict_outcome)
-
-
+               n_folds = 5)
 
 # get estimates
 summary(fit_star)
 
-
-
 # plot aupec
 plot(x = fit_star, 
-      outcome = "g3tlangss_binary",
+      outcome = "g3tlangss",
       treatment = "treatment",
-      data = star_new, 
+      data = star, 
       algorithms = c(
-              # "causal_forest",
+              "causal_forest",
               # "bart",
               # "svm",
-              # "lasso",
+              "lasso",
               # "boost", 
               # "random_forest",
               # "bagging",
               "cart"))
-
 # install the package
 devtools::document()
 check()
