@@ -7,10 +7,9 @@ Sys.setenv(RSTUDIO_PANDOC="/Applications/RStudio.app/Contents/MacOS/quarto/bin/t
 
 # Testing package
 devtools::document()
-devtools::load_all()
+devtools::check()
 
-# Testing what users will see
-devtools::install()
+devtools::load_all()
 
 ##
 ## use parallel 
@@ -30,16 +29,15 @@ outcomes <- c("g3tlangss",
                 "g3treadss","g3tmathss")
 
 
-star_new <- star %>% 
-  mutate(
-    g3tlangss_binary = (g3tlangss > mean(g3tlangss))*1) 
+# star_new <- star %>% 
+#   mutate(
+#     g3tlangss_binary = (g3tlangss > mean(g3tlangss))*1) 
 
-# star_new$g3tlangss_binary %>% factor(.,levels = c(1,0))
-
-star_new$g3tlangss_binary %>% class
+# star_new$g3tlangss_binary %>% class
 
 covariates <-  star %>% dplyr::select(-c(all_of(outcomes),"treatment")) %>% colnames()
 
+# binary outcomes
 system.time(
 fit_star <- run_itr(
                outcome = "g3tlangss_binary",
@@ -59,13 +57,65 @@ fit_star <- run_itr(
                plim = 0.2,
                n_folds = 2)
 )
-debugonce(run_itr)
+
+# continous outcoms
+system.time(
+fit_star <- run_itr(
+               outcome = "g3tlangss",
+               treatment = "treatment",
+               covariates = covariates,
+               data = star,
+               algorithms = c(
+                  "causal_forest", 
+                  # "bartc",
+                  "bart",
+                  # "svm",
+                  "lasso",
+                  # "boost", 
+                  # "random_forest",
+                  # "bagging",
+                  "cart"),
+               plim = 0.2,
+               n_folds = 3)
+)
+
+# compute qoi
+est_itr <- estimate_itr(
+            fit = fit_star,
+            outcome = "g3tlangss",
+            algorithms = c(
+                        "causal_forest", 
+                        # "bartc",
+                        "bart",
+                        # "svm",
+                        "lasso",
+                        # "boost", 
+                        # "random_forest",
+                        # "bagging",
+                        "cart"))
+
 
 # get estimates
-summary(fit_star)
+summary(est_itr)
 
-# plot aupec
-plot(x = fit_star, 
+# plot aupec for continous outcomes
+plot(x = est_itr, 
+      outcome = "g3tlangss",
+      treatment = "treatment",
+      data = star, 
+      algorithms = c(
+                        "causal_forest", 
+                        # "bartc",
+                        "bart",
+                        # "svm",
+                        "lasso",
+                        # "boost", 
+                        # "random_forest",
+                        # "bagging",
+                        "cart"))
+
+# plot aupec for binary outcomes
+plot(x = est_itr, 
       outcome = "g3tlangss_binary",
       treatment = "treatment",
       data = star_new, 
