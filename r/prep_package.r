@@ -48,8 +48,8 @@ algs <- c(
                   # "svm",
                   # "lasso",
                   # "boost", 
-                  "random_forest")
-                  # "bagging",
+                  "random_forest",
+                  "bagging")
                   # "cart")
 
 # train models
@@ -68,16 +68,7 @@ fit_star <- run_itr(
 est_itr <- estimate_itr(
             fit = fit_star,
             outcome = "g3tlangss",
-            algorithms = c(
-                        "causal_forest", 
-                        # "bartc",
-                        # "bart",
-                        # "svm",
-                        # "lasso",
-                        # "boost", 
-                        # "random_forest",
-                        # "bagging",
-                        "cart"))
+            algorithms = algs)
 
 
 # get estimates
@@ -88,49 +79,52 @@ plot(x = est_itr,
       outcome = "g3tlangss",
       treatment = "treatment",
       data = star, 
-      algorithms = c(
-                        "causal_forest", 
-                        # "bartc",
-                        # "bart",
-                        # "svm",
-                        # "lasso",
-                        # "boost", 
-                        # "random_forest",
-                        # "bagging",
-                        "cart"))
+      algorithms = algs)
 
 ##
 ## for binary outcomes
 ##
 
-library(randomForest)
+library(glmnet)
+?glmnet
 iris %>% 
    mutate(species_binary = ifelse(Species == "setosa", 1,0)) -> iris_new
 
-mod <- rpart(
-   formula = species_binary ~ Sepal.Length,
-   data = iris_new[1:100,],
-   method = "class")
+lasso_x <- iris_new[1:100,] %>% select(-c(species_binary, Species)) %>% as.matrix()
+lasso_y <- iris_new[1:100,] %>% pull(species_binary)
 
-predict(mod,iris_new[101:150,], type = "prob")[, 2]
+lasso_pred <- iris_new[101:150,] %>% select(-c(species_binary, Species)) %>% as.matrix()
+
+iris_new[1:100,] %>% select(- Sepal.Length) %>% summary
+
+mod <- glmnet::glmnet(
+   lasso_x,
+   lasso_y,
+   alpha = 1,
+        family = "binomial",
+        # lambda = cv.lasso$lambda.min)
+        lambda = 0.05)
+
+predict(mod,lasso_pred, type = "response") %>% summary()
 
 predict(mod,iris_new[101:150,], type = "prob")[, 2]  %>% class
 
 
+
 debugonce(run_itr)          
-debugonce(run_bartmachine)
-debugonce(test_bart)
+debugonce(run_cart)
+debugonce(test_cart)
 
-  ## outcome
-  outcome = testing_data_elements_cart[["data"]][["Y"]]
+#   ## outcome
+#   outcome = testing_data_elements_cart[["data"]][["Y"]]
 
-  if(length(unique(outcome)) > 2){
-      ## predict 
-      Y0t_total = predict(fit_train, newdata=total_data_elements_cart[["data0t"]])
-      Y1t_total = predict(fit_train, newdata=total_data_elements_cart[["data1t"]])
+#   if(length(unique(outcome)) > 2){
+#       ## predict 
+#       Y0t_total = predict(fit_train, newdata=total_data_elements_cart[["data0t"]])
+#       Y1t_total = predict(fit_train, newdata=total_data_elements_cart[["data1t"]])
 
-      tau_total=Y1t_total - Y0t_total + runif(n_df,-1e-6,1e-6)
-  }else {
+#       tau_total=Y1t_total - Y0t_total + runif(n_df,-1e-6,1e-6)
+#   }else {
 
 
 #   Y0t_total = predict(
