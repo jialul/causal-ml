@@ -21,10 +21,8 @@ itr_lm.R
 .httr-oauth
 
 # directories
-/data/
 /temp/
 /example/
 /archive/
 /note/
 /output/
-docs
