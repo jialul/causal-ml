@@ -16,7 +16,8 @@ Description: Provides various statistical methods for evaluating
     and Li (2019) <arXiv:1905.05389>.
 License: GPL (>=2)
 URL: https://github.com/MichaelLLi/evalITR,
-    https://michaellli.github.io/evalITR/
+    https://michaellli.github.io/evalITR/,
+    https://jialul.github.io/causal-ml/
 BugReports: https://github.com/MichaelLLi/evalITR/issues
 Depends: 
     dplyr (>= 1.0),
