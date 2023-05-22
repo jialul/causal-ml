@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 You can install the development version of evalITR from [GitHub](https://github.com/) with:
 
-``` r
+``` {r}
 # install.packages("devtools")
 devtools::install_github("MichaelLLi/evalITR", ref = "causal-ml")
 ```
@@ -24,7 +24,7 @@ devtools::install_github("MichaelLLi/evalITR", ref = "causal-ml")
 
 (Optional) if you have multiple cores, we recommendate using multisession futures and processing in parallel. This would increase computation efficiency and reduce the time to fit the model. 
 
-```r
+```{r}
 library(furrr)
 library(future.apply)
 
