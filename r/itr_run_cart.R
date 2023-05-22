@@ -4,136 +4,145 @@
 
 
 run_cart <- function(
-  dat_train, 
-  dat_test, 
+  dat_train,
+  dat_test,
   dat_total,
-  params, 
-  indcv, 
+  params,
+  indcv,
   iter,
-  plim,
-  plot
+  budget
 ) {
-  
-  ## train 
+
+  # split/cross-validation
+  cv <- params$cv
+
+  ## train
   fit_train <- train_cart(dat_train)
-    
-  ## test 
+
+  ## test
   fit_test <- test_cart(
-    fit_train, dat_test, dat_total, params$n_df, params$n_tb, 
-    indcv, iter, plim
+    fit_train, dat_test, dat_total, params$n_df, params$n_tb,
+    indcv, iter, budget, cv
   )
 
-  # plot
-  if(plot == TRUE){
-    plot <- plot_var_importance_cart(fit_train, "CART", iter)
-  }else {
-     plot <- NULL
-  }
-  
 
-  return(fit_test)
+  return(list(test = fit_test, train = fit_train))
 }
 
 
-
+#' @import rpart
 train_cart <- function(dat_train) {
-  
-  ## format training data 
+
+  ## format training data
   training_data_elements_cart = create_ml_args_cart(dat_train)
-  
+
   ## train formula
   formula_cart = training_data_elements_cart[["formula"]]
 
-  ## fit
-  fit <- rpart(formula_cart, data = training_data_elements_cart[["data"]], method = "anova", 
-  control = rpart.control(minsplit = 2, minbucket = 1, 
-        cp = 0.0015)) #relax the contraint for cart
+  ## outcome
+  outcome = training_data_elements_cart[["data"]][["Y"]]
+
+  if(length(unique(outcome)) > 2){
+      ## fit
+      fit <- rpart(formula_cart, data = training_data_elements_cart[["data"]], method = "anova")
+      # control = rpart.control(minsplit = 2, minbucket = 1,
+            # cp = 0.0015)) #relax the contraint for cart
+  }else {
+      ## fit
+      fit <- rpart(formula_cart, data = training_data_elements_cart[["data"]], method = "class")
+  }
 
   return(fit)
 }
 
+#'@importFrom stats predict runif
 test_cart <- function(
-  fit_train, dat_test, dat_total, n_df, n_tb, indcv, iter, plim
+  fit_train, dat_test, dat_total, n_df, n_tb, indcv, iter, budget, cv
 ) {
-  
-  ## format data 
+
+  ## format data
   testing_data_elements_cart = create_ml_args_cart(dat_test)
   total_data_elements_cart   = create_ml_args_cart(dat_total)
-  
-  ## predict 
-  
-  Y0t_total = predict(fit_train, newdata=total_data_elements_cart[["data0t"]])
-  Y1t_total = predict(fit_train, newdata=total_data_elements_cart[["data1t"]])
 
-  tau_total=Y1t_total - Y0t_total + runif(n_df,-1e-6,1e-6)
+  ## outcome
+  outcome = testing_data_elements_cart[["data"]][["Y"]]
+
+  if(cv == TRUE){
+
+    if(length(unique(outcome)) > 2){
+      ## predict
+      Y0t_total = predict(fit_train, newdata=total_data_elements_cart[["data0t"]])
+      Y1t_total = predict(fit_train, newdata=total_data_elements_cart[["data1t"]])
+
+      }else {
+      ## predict
+      Y0t_total = predict(
+        fit_train,
+        newdata = total_data_elements_cart[["data0t"]],
+        type = "prob")[, 2]
+      Y1t_total = predict(
+        fit_train,
+        newdata = total_data_elements_cart[["data1t"]],
+        type = "prob")[, 2]
+      }
+
+      # predicted tau
+      tau_total=Y1t_total - Y0t_total + runif(n_df,-1e-6,1e-6)
+
+      ## compute quantities of interest
+      tau_test <-  tau_total[indcv == iter]
+      That     <-  as.numeric(tau_total > 0)
+      That_p   <- as.numeric(tau_total >= sort(tau_test, decreasing = TRUE)[floor(budget*length(tau_test))+1])
 
 
-  ## compute quantities of interest 
-  tau_test <-  tau_total[indcv == iter] 
-  That     <-  as.numeric(tau_total > 0)
-  That_p   <- as.numeric(tau_total >= sort(tau_test, decreasing = TRUE)[floor(plim*length(tau_test))+1])
-  
-  
-  ## output 
-  cf_output <- list(
-    tau      = c(tau_test, rep(NA, length(tau_total) - length(tau_test))),
-    tau_cv   = tau_total, 
-    That_cv  = That, 
-    That_pcv = That_p
-  )
-  
+      ## output
+      cf_output <- list(
+        tau      = c(tau_test, rep(NA, length(tau_total) - length(tau_test))),
+        tau_cv   = tau_total,
+        That_cv  = That,
+        That_pcv = That_p
+      )
+  }
+
+  if(cv == FALSE){
+
+    if(length(unique(outcome)) > 2){
+      ## predict
+      Y0t_test = predict(fit_train, newdata=testing_data_elements_cart[["data0t"]])
+      Y1t_test = predict(fit_train, newdata=testing_data_elements_cart[["data1t"]])
+
+      }else {
+      ## predict
+      Y0t_test = predict(
+        fit_train,
+        newdata = testing_data_elements_cart[["data0t"]],
+        type = "prob")[, 2]
+      Y1t_test = predict(
+        fit_train,
+        newdata = testing_data_elements_cart[["data1t"]],
+        type = "prob")[, 2]
+      }
+
+      # predicted tau
+      tau_test = Y1t_test - Y0t_test + runif(length(Y0t_test),-1e-6,1e-6)
+
+      ## compute quantities of interest
+      That     =  as.numeric(tau_test > 0)
+      That_p   = numeric(length(That))
+      That_p[sort(tau_test,decreasing =TRUE,index.return=TRUE)$ix[1:(floor(budget*length(tau_test))+1)]] = 1
+
+
+      ## output
+      cf_output <- list(
+        tau      = tau_test,
+        tau_cv   = tau_test,
+        That_cv  = That,
+        That_pcv = That_p
+        )
+  }
+
+
   return(cf_output)
 }
 
 
-
-## plot varaible importance
-
-plot_var_importance_cart <- function(fit_train, method, fold){
-
-  df <- fit_train$"variable.importance" %>% as.data.frame() %>% {{temp <<-.}} %>%
-  dplyr::mutate(variable = rownames(temp)) %>%
-    rename(value = ".")
-
-  highlight_df <- df[c("pseudo"),]
-
-  # ## recode the variable names                
-  # df$variable <- fct_recode(df$variable,
-  #                           "Area population" = "area_pop_base",
-  #                           "Total oustanding debt in area" =  "area_debt_total_base", 
-  #                           "Total number of business in area" = "area_business_total_base", 
-  #                           "Area mean montly pc expenditure" = "area_exp_pc_mean_base", 
-  #                           "Area literacy rate (HH heads)" = "area_literate_head_base","Area literacy rate" = "area_literate_base")
-
-  #   highlight_df$variable  <- fct_recode(highlight_df$variable,
-  #                           "Total oustanding debt in area" = "area_debt_total_base",
-  #                           "Area mean montly pc expenditure" = "area_exp_pc_mean_base",
-  #                           "Area literacy rate" = "area_literate_base")
-
-  df  %>% 
-    ggplot(., aes(x = reorder(variable,value), y = value)) + 
-    geom_bar(stat="identity", fill= rainbow(1), alpha=.4) +
-    geom_bar(data = highlight_df, stat="identity", fill= rainbow(1), alpha=.8) +
-    theme_bw()  +
-    coord_flip() +
-    ggtitle(method) +
-    labs(y = "Coefficient",
-       x = "Variable") 
-
-  ggsave(here("plot", paste0("cart_var_importance", fold, ".png")), width = 6, height = 4.5, dpi = 300)
-
-}
-
-
-# fit$"variable.importance" %>% as.data.frame() %>% {{tmp <<-.}} %>%
-#     dplyr::mutate(variable = rownames(tmp)) %>%
-#     rename(value = ".") %>% 
-#     ggplot(., aes(x = reorder(variable,value), y = value)) + 
-#     geom_bar(stat="identity", fill= rainbow(1), alpha=.4) +
-#     theme_bw()  +
-#     coord_flip() +
-#     ggtitle("yes") +
-#     labs(y = "Coefficient",
-#        x = "Variable") 
-
-  

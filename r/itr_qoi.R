@@ -1,83 +1,240 @@
-
-##
-## Quantities of Interest (PAPE, PAPEp, PAPD, AUPEC)
-##
-
-
-
-#' Compute Quantities of Interest
+#' Compute Quantities of Interest (PAPE, PAPEp, PAPDp, AUPEC, GATE, GATEcv)
 #' @param fit_obj An output object from \code{itr_single_outcome} function.
+#' @param algorithms Machine learning algorithms
+#' @importFrom rlang .data
 
 compute_qoi <- function(fit_obj, algorithms) {
-  
+
   ## extract objects
-  fit_ml <- fit_obj$fit_ml 
-  params <- fit_obj$params 
-  Ycv    <- fit_obj$Ycv 
-  Tcv    <- fit_obj$Tcv 
+  fit_ml <- fit_obj$fit_ml
+  params <- fit_obj$params
+  Ycv    <- fit_obj$Ycv
+  Tcv    <- fit_obj$Tcv
   indcv  <- fit_obj$indcv
-  plim   <- fit_obj$plim
-  
-  
-  ## PAPE and PAPEp 
-  PAPE <- PAPEp <- vector("list", params$n_alg)
-  for (i in seq_len(params$n_alg)) {
-    ## make That_cv into matrix 
-    That_cv_mat <- furrr::future_map(fit_ml[[ algorithms[i] ]], ~.x$That_cv) %>% do.call(cbind, .)
-    That_pcv_mat <- furrr::future_map(fit_ml[[ algorithms[i] ]], ~.x$That_pcv) %>% do.call(cbind, .)
-    
-    ## compute PAPE
-    PAPE[[i]] <- PAPEcv(Tcv, That_cv_mat, Ycv, indcv)
-    
-    ## compute PAPEp
-    PAPEp[[i]] <- PAPEcv(Tcv, That_pcv_mat, Ycv, indcv, plim) 
-    
-    ## name 
-    PAPE[[i]]$alg <-  PAPEp[[i]]$alg <- algorithms[i]
-  }
-  
-  
-  ## PAPDp 
-  PAPDp <- list()
-  if (params$n_alg > 1) {
-    count <- 1
-    
-    for (i in 1:(params$n_alg-1)) {
-      That_pcv_i <- furrr::future_map(fit_ml[[ algorithms[i] ]], ~.x$That_pcv) %>% do.call(cbind, .)
-      
-      for (j in (i+1):params$n_alg) {
-        # compare algorithm[i] and algorithm[j]
-        That_pcv_j <- furrr::future_map(fit_ml[[ algorithms[j] ]], ~.x$That_pcv) %>% do.call(cbind, .)
-        
-        PAPDp[[count]] <- PAPDcv(
-          Tcv, That_pcv_i, That_pcv_j, Ycv, indcv, plim 
-        )
-        
-        PAPDp[[count]]$alg <- paste0(algorithms[i], " x ", algorithms[j])
-        ## update iterator 
-        count <- count + 1
-      }
+  budget   <- fit_obj$budget
+  cv     <- fit_obj$params$cv
+
+
+  ## -----------------------------------------
+  ## compute quantities under cross validation
+  ## -----------------------------------------
+  if (cv == TRUE) {
+
+    ## PAPE and PAPEp
+    PAPE <- PAPEp <- vector("list", params$n_alg)
+    for (i in seq_len(params$n_alg)) {
+      ## make That_cv into matrix
+      That_cv_mat <- furrr::future_map(fit_ml[[ algorithms[i] ]], ~.x$That_cv) %>% do.call(cbind, .)
+      That_pcv_mat <- furrr::future_map(fit_ml[[ algorithms[i] ]], ~.x$That_pcv) %>% do.call(cbind, .)
+
+      ## compute PAPE
+      PAPE[[i]] <- PAPEcv(Tcv, That_cv_mat, Ycv, indcv)
+
+      ## compute PAPEp
+      PAPEp[[i]] <- PAPEcv(Tcv, That_pcv_mat, Ycv, indcv, budget)
+
+      ## name
+      PAPE[[i]]$alg <-  PAPEp[[i]]$alg <- algorithms[i]
     }
-  } else {
-    cat("Cannot compute PAPDp")
+
+
+    ## PAPDp
+    PAPDp <- list()
+    if (params$n_alg > 1) {
+      count <- 1
+
+      for (i in 1:(params$n_alg-1)) {
+        That_pcv_i <- furrr::future_map(fit_ml[[ algorithms[i] ]], ~.x$That_pcv) %>% do.call(cbind, .)
+
+        for (j in (i+1):params$n_alg) {
+          # compare algorithm[i] and algorithm[j]
+          That_pcv_j <- furrr::future_map(fit_ml[[ algorithms[j] ]], ~.x$That_pcv) %>% do.call(cbind, .)
+
+          PAPDp[[count]] <- PAPDcv(
+            Tcv, That_pcv_i, That_pcv_j, Ycv, indcv, budget
+          )
+
+          PAPDp[[count]]$alg <- paste0(algorithms[i], " x ", algorithms[j])
+          ## update iterator
+          count <- count + 1
+        }
+      }
+    } else {
+      cat("Cannot compute PAPDp")
+    }
+
+
+    ##  Compute AUPEC
+    aupec <- vector("list", length = length(algorithms))
+    for (i in seq_along(algorithms)) {
+      tau <- furrr::future_map(fit_ml[[i]], ~.x$tau) %>% do.call(cbind, .)
+      tau_cv <- furrr::future_map(fit_ml[[i]], ~.x$tau_cv) %>% do.call(cbind, .)
+      That_pcv_mat <- furrr::future_map(fit_ml[[i]], ~.x$That_pcv) %>% do.call(cbind, .)
+
+      aupec[[i]] <- getAupecOutput(
+        tau, tau_cv, That_pcv_mat, algorithms[i],
+        NFOLDS = params$n_folds, Ycv = Ycv, Tcv = Tcv, indcv = indcv
+      )
+    }
+
+    ## GATE
+    GATE <- vector("list", length = length(algorithms))
+    for (i in seq_along(algorithms)) {
+      tau <- furrr::future_map(fit_ml[[i]], ~.x$tau) %>% do.call(cbind, .)
+      tau_cv <- furrr::future_map(fit_ml[[i]], ~.x$tau_cv) %>% do.call(cbind, .)
+
+      ## Compute GATE
+      GATE[[i]] <- GATEcv(Tcv, tau_cv, Ycv, indcv, params$ngates)
+
+      ## indicate algorithm
+      GATE[[i]]$alg <- algorithms[i]
+
+      ## indicate group number
+      GATE[[i]]$group <- seq_along(GATE[[i]]$gate)
+    }
+
   }
-  
-  
-  ##  Compute AUPEC
-  aupec <- vector("list", length = length(algorithms))
+
+
+
+  ## -----------------------------------------
+  ## compute quantities under sample splitting
+  ## -----------------------------------------
+  if (cv == FALSE) {
+
+    ## PAPE and PAPEp
+    PAPE <- PAPEp <- vector("list", params$n_alg)
+    for (i in seq_len(params$n_alg)) {
+
+      ## compute PAPE
+      PAPE[[i]] <- PAPE(Tcv, fit_ml[[i]][["That_cv"]], Ycv, centered = TRUE)
+
+      ## compute PAPEp: sp does not have papep, check PAPE.R
+      PAPEp[[i]] <- PAPE(Tcv, fit_ml[[i]][["That_pcv"]], Ycv, centered = TRUE, budget)
+
+      ## name
+      PAPE[[i]]$alg <-  PAPEp[[i]]$alg <- algorithms[i]
+    }
+
+
+    ## PAPDp
+    PAPDp <- list()
+    if (params$n_alg > 1) {
+      count <- 1
+
+      for (i in 1:(params$n_alg-1)) {
+        That_pcv_i <- fit_ml[[i]][["That_pcv"]]
+
+        for (j in (i+1):params$n_alg) {
+          # compare algorithm[i] and algorithm[j]
+          That_pcv_j <- fit_ml[[j]][["That_pcv"]]
+
+          PAPDp[[count]] <- PAPD(
+            Tcv, That_pcv_i, That_pcv_j, Ycv, budget, centered = TRUE
+          )
+
+          PAPDp[[count]]$alg <- paste0(algorithms[i], " x ", algorithms[j])
+          ## update iterator
+          count <- count + 1
+        }
+      }
+    } else {
+      cat("Cannot compute PAPDp")
+    }
+
+    ## AUPEC
+    aupec <- vector("list", length = length(algorithms))
+    for (i in seq_along(algorithms)) {
+
+      aupec[[i]] <- AUPEC(Tcv, fit_ml[[i]][["tau"]], Ycv, centered = TRUE)
+    }
+
+    ## GATE
+    GATE <- vector("list", length = length(algorithms))
+    for (i in seq_along(algorithms)) {
+
+      ## Compute GATE
+      GATE[[i]] <- GATE(Tcv, fit_ml[[i]][["tau"]], Ycv, params$ngates)
+
+      ## indicate algorithm
+      GATE[[i]]$alg <- algorithms[i]
+
+      ## indicate group number
+      GATE[[i]]$group <- seq_along(GATE[[i]]$gate)
+    }
+  }
+
+  out <- list(
+        PAPE = PAPE,
+        PAPEp = PAPEp,
+        PAPDp = PAPDp,
+        AUPEC = aupec,
+        GATE = GATE)
+
+  return(out)
+}
+
+
+
+
+
+#' Compute Quantities of Interest (PAPE, PAPEp, PAPDp, AUPEC, GATE, GATEcv) with user defined functions
+#' @param user_function A user-defined function to create an ITR. The function should take the data as input and return an ITR. The output is a vector of the unit-level binary treatment that would have been assigned by the individualized treatment rule. The default is \code{NULL}, which means the ITR will be estimated from the \code{estimate_itr}. 
+#' @param algorithms A vector of the names of the algorithms to be used.
+#' @param treatment A binary treatment variable in the sample.
+#' @param outcome A vector of the outcome variable of interest for each sample.
+#' @param tau A vector of the unit-level continuous score for treatment assignment. We assume those that have tau<0 should not have treatment. Conditional Average Treatment Effect is one possible measure.
+#' @param data A data frame containing the variables of interest.
+#' @param ngates The number of gates to be used in the GATE function.
+#' @param ... Additional arguments to be passed to the user-defined function.
+#' @importFrom rlang .data
+
+compute_qoi_user <- function(user_function, algorithms, treatment, outcome,tau, data, ngates, ...) {
+
+  # parameters
+  That <- do.call(user_function, list(data))
+  Ycv <- data %>% pull(sym(outcome))
+  Tcv <- data %>% pull(sym(treatment))
+
+  # PAPE 
+  PAPE <- PAPEp <- vector("list", length(user_function))
+  for (i in seq_len(length(user_function))) {
+
+    ## compute PAPE
+    PAPE[[i]] <- PAPE(Tcv, That, Ycv, centered = TRUE)
+
+    ## name
+    PAPE[[i]]$alg <- user_function[i]
+  }
+
+  ## AUPEC
+  aupec <- vector("list", length = length(user_function))
+  for (i in seq_along(length(user_function))) {
+
+    aupec[[i]] <- AUPEC(Tcv, tau, Ycv, centered = TRUE)
+  }
+
+  ## GATE
+  GATE <- vector("list", length = length(algorithms))
   for (i in seq_along(algorithms)) {
-    tau <- furrr::future_map(fit_ml[[i]], ~.x$tau) %>% do.call(cbind, .)
-    tau_cv <- furrr::future_map(fit_ml[[i]], ~.x$tau_cv) %>% do.call(cbind, .)
-    That_pcv_mat <- furrr::future_map(fit_ml[[i]], ~.x$That_pcv) %>% do.call(cbind, .)
-    
-    aupec[[i]] <- getAupecOutput(
-      tau, tau_cv, That_pcv_mat, algorithms[i],
-      NFOLDS = params$n_folds, Ycv = Ycv, Tcv = Tcv, indcv = indcv
-      
-    )
+
+    ## Compute GATE
+    GATE[[i]] <- GATE(Tcv, tau, Ycv, ngates)
+
+    ## indicate algorithm
+    GATE[[i]]$alg <- user_function[i]
+
+    ## indicate group number
+    GATE[[i]]$group <- seq_along(GATE[[i]]$gate)
   }
   
-  return(
-    list(PAPE = PAPE, PAPEp = PAPEp, PAPDp = PAPDp, AUPEC = aupec)
-  )
+
+  out <- list(
+        PAPE = PAPE,
+        # PAPEp = PAPEp,
+        # PAPDp = PAPDp,
+        AUPEC = aupec,
+        GATE = GATE)
+
+  return(out)
 }
