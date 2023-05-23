@@ -153,26 +153,26 @@ in <a href="https://arxiv.org/abs/2203.14511" class="external-link">Imai and Li
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── PAPE ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1     0.43           1.1 causal_forest      0.39    0.69</span></span>
+<span><span class="co">#&gt; 1     0.75          0.99 causal_forest      0.76    0.45</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPEp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      1.8           1.2 causal_forest       1.5    0.13</span></span>
+<span><span class="co">#&gt; 1      2.2           1.3 causal_forest       1.6     0.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPDp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; data frame with 0 columns and 0 rows</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── AUPEC ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      1.7          0.94 causal_forest       1.8   0.072</span></span>
+<span><span class="co">#&gt; 1        1          0.92 causal_forest       1.1    0.28</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── GATE ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm group statistic p.value upper lower</span></span>
-<span><span class="co">#&gt; 1      -19           108 causal_forest     1     -0.17    0.86  -196   159</span></span>
-<span><span class="co">#&gt; 2      -70           107 causal_forest     2     -0.66    0.51  -247   106</span></span>
-<span><span class="co">#&gt; 3       46           109 causal_forest     3      0.42    0.67  -133   226</span></span>
-<span><span class="co">#&gt; 4      115           110 causal_forest     4      1.05    0.29   -65   295</span></span>
-<span><span class="co">#&gt; 5      -67           106 causal_forest     5     -0.63    0.53  -242   108</span></span></code></pre></div>
+<span><span class="co">#&gt; 1       60           108 causal_forest     1      0.55    0.58  -118   237</span></span>
+<span><span class="co">#&gt; 2     -147           108 causal_forest     2     -1.36    0.17  -324    30</span></span>
+<span><span class="co">#&gt; 3       61           108 causal_forest     3      0.57    0.57  -115   238</span></span>
+<span><span class="co">#&gt; 4       52           109 causal_forest     4      0.48    0.63  -127   231</span></span>
+<span><span class="co">#&gt; 5      -22           107 causal_forest     5     -0.21    0.84  -199   154</span></span></code></pre></div>
 <p>We can extract estimates from the <code>est</code> object. The
 following code shows how to extract the GATE estimates for the writing
 score with <code>rlasso</code> and <code>lasso</code> algorithms.</p>
