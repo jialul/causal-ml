@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<a href = "https://github.com/MichaelLLi/evalITR/tree/causal-ml/"><img src="man/figures/README-manual.png" width="100%" />
+<img src="man/figures/README-manual.png" width="100%" />
 
 <!-- badges: start -->
 <!-- badges: end -->
