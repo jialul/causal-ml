@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 
 
 ```{r pic1, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("man/figures/README-manual.png")
+knitr::include_graphics("http://github.com/jialul/causal-ml/blob/main/man/figures/README-manual.png")
 ```
 
 <!-- badges: start -->

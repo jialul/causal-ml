@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<a href = "https://github.com/jialul/causal-ml/blob/main/"><img src="man/figures/README-manual.png" width="100%" />
+<img src="http://github.com/jialul/causal-ml/blob/main/man/figures/README-manual.png" width="100%" />
 
 <!-- badges: start -->
 <!-- badges: end -->
