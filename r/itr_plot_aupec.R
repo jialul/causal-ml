@@ -83,7 +83,7 @@ data %>%
       geom_ribbon(
         aes(ymin=AUPECmin, ymax=AUPECmax),fill="tomato1",alpha=0.2) +
       geom_abline(
-        intercept = sum(Ycv*(1-Tcv))/sum(1-Tcv), slope = sum(Ycv*Tcv)/sum(Tcv)-sum(Ycv*(1-Tcv))/sum(1-Tcv),size=0.5) +
+        intercept = sum(Ycv*(1-Tcv))/sum(1-Tcv), slope = sum(Ycv*Tcv)/sum(Tcv)-sum(Ycv*(1-Tcv))/sum(1-Tcv),linewidth=0.5) +
       geom_text(
         data = graphLabels, aes(x = 0.57, y = max(data$AUPECmax, na.rm = TRUE)+0.35, label = Pval),size=3) +
       theme(text = element_text(size=13.5),

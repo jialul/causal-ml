@@ -1,23 +1,10 @@
 .Rproj.user
 .Rhistory
 .RData
-*.Rproj
-*.RDATA
-.Ruserdata
-.rds
-*.code-workspace
-
-diagnoses.R
-itr_lm.R
+*.DS_Store
 .DS_Store
 .DS_Store
-.Rdata
-.httr-oauth
-
-# directories
-/temp/
-/example/
-/archive/
-/note/
-/output/
+man/.DS_Store
 docs
+inst/doc
+.DS_Store
