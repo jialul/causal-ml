@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="man/figures/README-manual.png" width="100%" />
+## evalITR [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/evalITR)](https://cran.r-project.org/package=evalITR) ![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/evalITR)
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-## evalITR [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/evalITR)](https://cran.r-project.org/package=evalITR) ![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/evalITR)
+![](man/figures/README-manual.png)<!-- -->
 
 R package evalITR provides various statistical methods for estimating
 and evaluating Individualized Treatment Rules under randomized data. The

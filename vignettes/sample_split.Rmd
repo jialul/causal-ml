@@ -1,5 +1,5 @@
 ---
-title: "Sample splitting"
+title: "Sample Splitting"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{sample_split}
@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "../man/figures/README-"
   )
+
+options(rmarkdown.html_vignette.check_title = FALSE)  
 ```
 
 
@@ -24,8 +26,7 @@ We start with a simple example with one outcome variable (writing scores) and on
 To begin, we load the dataset and specify the outcome variable and covariates to be used in the model. Next, we utilize a random forest algorithm to develop an Individualized Treatment Rule (ITR) for estimating the varied impacts of small class sizes on students' writing scores.  Since the treatment is often costly for most policy programs, we consider a case with 20% budget constraint (`budget` = 0.2). The model will identify the top 20% of units who benefit from the treatment most and assign them to with the treatment. We train the model through sample splitting, with the `split_ratio` between the train and test sets determined by the `split_ratio` argument. Specifically, we allocate 70% of the data to train the model, while the remaining 30% is used as testing data (`split_ratio` = 0.7).
 
 
-```{r sample_split, message = FALSE}
-
+```{r sample_split, warning = FALSE, message = FALSE}
 library(tidyverse)
 library(evalITR)
 
@@ -42,17 +43,19 @@ star_data <- star %>% dplyr::select(-c(g3treadss,g3tmathss))
 
 # specifying the formula
 user_formula <- as.formula(
-  "g3tlangss ~ treatment + gender + race + birthmonth + birthyear + SCHLURBN + GRDRANGE + GKENRMNT + GKFRLNCH + GKBUSED + GKWHITE ")
+  "g3tlangss ~ treatment + gender + race + birthmonth + 
+  birthyear + SCHLURBN + GRDRANGE + GKENRMNT + GKFRLNCH + 
+  GKBUSED + GKWHITE ")
 
 
 # estimate ITR 
 fit <- estimate_itr(
-               treatment = treatment,
-               form = user_formula,
-               data = star_data,
-               algorithms = c("causal_forest"),
-               budget = 0.2,
-               split_ratio = 0.7)
+  treatment = treatment,
+  form = user_formula,
+  data = star_data,
+  algorithms = c("causal_forest"),
+  budget = 0.2,
+  split_ratio = 0.7)
 
 
 # evaluate ITR 
@@ -69,9 +72,9 @@ summary(est)
 ```
 
 
-We can extract estimates from the `est` object. The following code shows how to extract the GATE estimates for the writing score with `rlasso` and `lasso` algorithms. 
+We can extract estimates from the `est` object. The following code shows how to extract the GATE estimates for the writing score with the causal forest algorithm. 
 
-```{r est_extract, eval = FALSE}
+```{r est_extract, warning = FALSE, message = FALSE}
 # plot GATE estimates
 summary(est)$GATE %>% 
   mutate(group = as_factor(group)) %>%
@@ -88,19 +91,13 @@ summary(est)$GATE %>%
         panel.background = element_blank()) +
   labs(x = "Group", y = "GATE estimate") +
   geom_hline(yintercept = 0, linetype = "dashed", color = "#4e4e4e") +
-  scale_color_manual(values = c("#E69F00", "#56B4E9", "#009E73", "#076f00", "#0072B2")) 
-
+  scale_color_manual(values = c("#0072B2","#E69F00", "#56B4E9", "#009E73", "#076f00")) 
 ```  
 
 
-```{r pic0, echo=FALSE, out.width = '60%'}
-knitr::include_graphics("../man/figures/gate.png")
-```
-
 We plot the estimated Area Under the Prescriptive Effect Curve for the writing score across a range of budget constraints for causal forest.
 
-```{r sp_plot, out.width = '60%'}
+```{r sp_plot}
 # plot the AUPEC 
 plot(est)
-
 ```
