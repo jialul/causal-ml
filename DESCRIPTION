@@ -41,7 +41,6 @@ Imports:
     purrr,
     randomForest,
     rlang,
-    rlearner,
     rqPen,
     scales,
     utils
@@ -49,6 +48,7 @@ Suggests:
     doParallel,
     furrr,
     knitr,
+    rlearner,    
     rmarkdown,
     testthat
 VignetteBuilder: 

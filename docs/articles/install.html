@@ -93,16 +93,12 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MichaelLLi/evalITR"</span>, ref <span class="op">=</span> <span class="st">"causal-ml"</span><span class="op">)</span></span></code></pre></div>
-<p>If you want to use the latest version of the package, you can install
-the development version of evalITR by specifying the branch name in
-<code><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">devtools::install_github</a></code>.</p>
+<p>If you want to use the latest version of the package, you can install the development version of evalITR by specifying the branch name in <code><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">devtools::install_github</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="parallelization">Parallelization<a class="anchor" aria-label="anchor" href="#parallelization"></a>
 </h3>
-<p>(Optional) if you have multiple cores, we recommendate using
-multisession futures and processing in parallel. This would increase
-computation efficiency and reduce the time to fit the model.</p>
+<p>(Optional) if you have multiple cores, we recommendate using multisession futures and processing in parallel. This would increase computation efficiency and reduce the time to fit the model.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.apply.futureverse.org" class="external-link">future.apply</a></span><span class="op">)</span></span>

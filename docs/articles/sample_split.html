@@ -82,25 +82,9 @@
 
     
     
-<p>This is an example using the <code>star</code> dataset (for more
-information about the dataset, please use <code><a href="../reference/star.html">?star</a></code>).</p>
-<p>We start with a simple example with one outcome variable (writing
-scores) and one machine learning algorithm (causal forest). Then we move
-to incoporate multiple outcomes and compare model performances with
-several machine learning algorithms.</p>
-<p>To begin, we load the dataset and specify the outcome variable and
-covariates to be used in the model. Next, we utilize a random forest
-algorithm to develop an Individualized Treatment Rule (ITR) for
-estimating the varied impacts of small class sizes on students’ writing
-scores. Since the treatment is often costly for most policy programs, we
-consider a case with 20% budget constraint (<code>budget</code> = 0.2).
-The model will identify the top 20% of units who benefit from the
-treatment most and assign them to with the treatment. We train the model
-through sample splitting, with the <code>split_ratio</code> between the
-train and test sets determined by the <code>split_ratio</code> argument.
-Specifically, we allocate 70% of the data to train the model, while the
-remaining 30% is used as testing data (<code>split_ratio</code> =
-0.7).</p>
+<p>This is an example using the <code>star</code> dataset (for more information about the dataset, please use <code><a href="../reference/star.html">?star</a></code>).</p>
+<p>We start with a simple example with one outcome variable (writing scores) and one machine learning algorithm (causal forest). Then we move to incoporate multiple outcomes and compare model performances with several machine learning algorithms.</p>
+<p>To begin, we load the dataset and specify the outcome variable and covariates to be used in the model. Next, we utilize a random forest algorithm to develop an Individualized Treatment Rule (ITR) for estimating the varied impacts of small class sizes on students’ writing scores. Since the treatment is often costly for most policy programs, we consider a case with 20% budget constraint (<code>budget</code> = 0.2). The model will identify the top 20% of units who benefit from the treatment most and assign them to with the treatment. We train the model through sample splitting, with the <code>split_ratio</code> between the train and test sets determined by the <code>split_ratio</code> argument. Specifically, we allocate 70% of the data to train the model, while the remaining 30% is used as testing data (<code>split_ratio</code> = 0.7).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MichaelLLi/evalITR" class="external-link">evalITR</a></span><span class="op">)</span></span>
@@ -137,47 +121,33 @@ remaining 30% is used as testing data (<code>split_ratio</code> =
 <span><span class="co"># evaluate ITR </span></span>
 <span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evaluate_itr.html">evaluate_itr</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Cannot compute PAPDp</span></span></code></pre></div>
-<p>The<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function displays the following summary
-statistics: (1) population average prescriptive effect
-<code>PAPE</code>; (2) population average prescriptive effect with a
-budget constraint <code>PAPEp</code>; (3) population average
-prescriptive effect difference with a budget constraint
-<code>PAPDp</code>. This quantity will be computed with more than 2
-machine learning algorithms); (4) and area under the prescriptive effect
-curve <code>AUPEC</code>. For more information about these evaluation
-metrics, please refer to <a href="https://arxiv.org/abs/1905.05389" class="external-link">Imai
-and Li (2021)</a>; (5) Grouped Average Treatment Effects
-<code>GATEs</code>. The details of the methods for this design are given
-in <a href="https://arxiv.org/abs/2203.14511" class="external-link">Imai and Li
-(2022)</a>.</p>
+<p>The<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function displays the following summary statistics: (1) population average prescriptive effect <code>PAPE</code>; (2) population average prescriptive effect with a budget constraint <code>PAPEp</code>; (3) population average prescriptive effect difference with a budget constraint <code>PAPDp</code>. This quantity will be computed with more than 2 machine learning algorithms); (4) and area under the prescriptive effect curve <code>AUPEC</code>. For more information about these evaluation metrics, please refer to <a href="https://arxiv.org/abs/1905.05389" class="external-link">Imai and Li (2021)</a>; (5) Grouped Average Treatment Effects <code>GATEs</code>. The details of the methods for this design are given in <a href="https://arxiv.org/abs/2203.14511" class="external-link">Imai and Li (2022)</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># summarize estimates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── PAPE ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      3.4           1.4 causal_forest       2.4   0.015</span></span>
+<span><span class="co">#&gt; 1      1.2          0.99 causal_forest       1.2    0.23</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPEp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      2.5           1.1 causal_forest       2.3   0.023</span></span>
+<span><span class="co">#&gt; 1      3.1           1.2 causal_forest       2.5   0.011</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPDp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; data frame with 0 columns and 0 rows</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── AUPEC ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      2.8             1 causal_forest       2.7  0.0062</span></span>
+<span><span class="co">#&gt; 1      2.6           0.9 causal_forest       2.8  0.0044</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── GATE ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm group statistic p.value upper lower</span></span>
-<span><span class="co">#&gt; 1     -285           106 causal_forest     1     -2.68  0.0074  -460  -110</span></span>
-<span><span class="co">#&gt; 2       77           108 causal_forest     2      0.71  0.4757  -101   256</span></span>
-<span><span class="co">#&gt; 3      -61           108 causal_forest     3     -0.56  0.5743  -239   117</span></span>
-<span><span class="co">#&gt; 4      201           110 causal_forest     4      1.83  0.0679    20   381</span></span>
-<span><span class="co">#&gt; 5       85           108 causal_forest     5      0.79  0.4296   -92   263</span></span></code></pre></div>
-<p>We can extract estimates from the <code>est</code> object. The
-following code shows how to extract the GATE estimates for the writing
-score with the causal forest algorithm.</p>
+<span><span class="co">#&gt; 1      101           109 causal_forest     1     0.923    0.36   -79   280</span></span>
+<span><span class="co">#&gt; 2     -130           107 causal_forest     2    -1.211    0.23  -307    47</span></span>
+<span><span class="co">#&gt; 3       10           109 causal_forest     3     0.092    0.93  -169   189</span></span>
+<span><span class="co">#&gt; 4      -55           109 causal_forest     4    -0.505    0.61  -234   124</span></span>
+<span><span class="co">#&gt; 5       88           107 causal_forest     5     0.816    0.41   -89   264</span></span></code></pre></div>
+<p>We can extract estimates from the <code>est</code> object. The following code shows how to extract the GATE estimates for the writing score with the causal forest algorithm.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot GATE estimates</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -198,9 +168,7 @@ score with the causal forest algorithm.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"#4e4e4e"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#0072B2"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>, <span class="st">"#076f00"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="../reference/figures/README-est_extract-1.png" width="80%"></p>
-<p>We plot the estimated Area Under the Prescriptive Effect Curve for
-the writing score across a range of budget constraints for causal
-forest.</p>
+<p>We plot the estimated Area Under the Prescriptive Effect Curve for the writing score across a range of budget constraints for causal forest.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot the AUPEC </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span></code></pre></div>
