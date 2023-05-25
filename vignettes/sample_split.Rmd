@@ -74,7 +74,7 @@ summary(est)
 
 We can extract estimates from the `est` object. The following code shows how to extract the GATE estimates for the writing score with the causal forest algorithm. 
 
-```{r est_extract, warning = FALSE, message = FALSE, out.width = "80%"}
+```{r est_extract, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 # plot GATE estimates
 library(ggplot2)
 summary(est)$GATE %>%
@@ -98,7 +98,7 @@ summary(est)$GATE %>%
 
 We plot the estimated Area Under the Prescriptive Effect Curve for the writing score across a range of budget constraints for causal forest.
 
-```{r sp_plot, out.width = "80%"}
+```{r sp_plot, fig.width = 6, fig.height = 4}
 # plot the AUPEC 
 plot(est)
 ```

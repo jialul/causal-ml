@@ -1,132 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jialul.github.io/causal-ml/404.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/articles/index.html</loc>
+    <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/articles/install.html</loc>
+    <loc>/articles/install.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/articles/sample_split.html</loc>
+    <loc>/articles/sample_split.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/articles/sample_split_caret.html</loc>
+    <loc>/articles/sample_split_caret.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/authors.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/index.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/news/index.html</loc>
+    <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/AUPEC.html</loc>
+    <loc>/reference/AUPEC.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/AUPECcv.html</loc>
+    <loc>/reference/AUPECcv.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/GATE.html</loc>
+    <loc>/reference/GATE.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/GATEcv.html</loc>
+    <loc>/reference/GATEcv.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/PAPD.html</loc>
+    <loc>/reference/PAPD.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/PAPDcv.html</loc>
+    <loc>/reference/PAPDcv.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/PAPE.html</loc>
+    <loc>/reference/PAPE.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/PAPEcv.html</loc>
+    <loc>/reference/PAPEcv.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/PAV.html</loc>
+    <loc>/reference/PAV.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/PAVcv.html</loc>
+    <loc>/reference/PAVcv.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/compute_qoi.html</loc>
+    <loc>/reference/compute_qoi.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/compute_qoi_user.html</loc>
+    <loc>/reference/compute_qoi_user.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/consist.test.html</loc>
+    <loc>/reference/consist.test.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/consistcv.test.html</loc>
+    <loc>/reference/consistcv.test.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_args.html</loc>
+    <loc>/reference/create_ml_args.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_args_bart.html</loc>
+    <loc>/reference/create_ml_args_bart.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_args_bartc.html</loc>
+    <loc>/reference/create_ml_args_bartc.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_args_causalforest.html</loc>
+    <loc>/reference/create_ml_args_causalforest.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_args_lasso.html</loc>
+    <loc>/reference/create_ml_args_lasso.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_args_svm.html</loc>
+    <loc>/reference/create_ml_args_svm.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_args_svm_cls.html</loc>
+    <loc>/reference/create_ml_args_svm_cls.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/create_ml_arguments.html</loc>
+    <loc>/reference/create_ml_arguments.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/estimate_itr.html</loc>
+    <loc>/reference/estimate_itr.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/evaluate_itr.html</loc>
+    <loc>/reference/evaluate_itr.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/het.test.html</loc>
+    <loc>/reference/het.test.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/hetcv.test.html</loc>
+    <loc>/reference/hetcv.test.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/index.html</loc>
+    <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/itr_single_outcome.html</loc>
+    <loc>/reference/itr_single_outcome.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/plot.itr.html</loc>
+    <loc>/reference/plot.itr.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/print.summary.itr.html</loc>
+    <loc>/reference/print.summary.itr.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/print.summary.test_itr.html</loc>
+    <loc>/reference/print.summary.test_itr.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/star.html</loc>
+    <loc>/reference/star.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/summary.itr.html</loc>
+    <loc>/reference/summary.itr.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/summary.test_itr.html</loc>
+    <loc>/reference/summary.test_itr.html</loc>
   </url>
   <url>
-    <loc>https://jialul.github.io/causal-ml/reference/test_itr.html</loc>
+    <loc>/reference/test_itr.html</loc>
   </url>
 </urlset>

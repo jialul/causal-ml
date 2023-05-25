@@ -35,16 +35,16 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-user-s-guide">User's Guide</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-user-s-guide">
     <a class="dropdown-item" href="../articles/install.html">Installation</a>
     <a class="dropdown-item" href="../articles/sample_split.html">Sample Splitting</a>
     <a class="dropdown-item" href="../articles/sample_split_caret.html">Sample Splitting with Caret</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -127,26 +127,26 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── PAPE ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      1.2          0.99 causal_forest       1.2    0.23</span></span>
+<span><span class="co">#&gt; 1      1.7           1.2 causal_forest       1.5    0.14</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPEp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      3.1           1.2 causal_forest       2.5   0.011</span></span>
+<span><span class="co">#&gt; 1      3.2           1.2 causal_forest       2.7  0.0079</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPDp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; data frame with 0 columns and 0 rows</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── AUPEC ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      2.6           0.9 causal_forest       2.8  0.0044</span></span>
+<span><span class="co">#&gt; 1      1.7          0.94 causal_forest       1.9   0.064</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── GATE ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm group statistic p.value upper lower</span></span>
-<span><span class="co">#&gt; 1      101           109 causal_forest     1     0.923    0.36   -79   280</span></span>
-<span><span class="co">#&gt; 2     -130           107 causal_forest     2    -1.211    0.23  -307    47</span></span>
-<span><span class="co">#&gt; 3       10           109 causal_forest     3     0.092    0.93  -169   189</span></span>
-<span><span class="co">#&gt; 4      -55           109 causal_forest     4    -0.505    0.61  -234   124</span></span>
-<span><span class="co">#&gt; 5       88           107 causal_forest     5     0.816    0.41   -89   264</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   -104.8           107 causal_forest     1    -0.980    0.33  -281    71</span></span>
+<span><span class="co">#&gt; 2     25.2           108 causal_forest     2     0.232    0.82  -153   203</span></span>
+<span><span class="co">#&gt; 3     37.9           109 causal_forest     3     0.349    0.73  -141   217</span></span>
+<span><span class="co">#&gt; 4     48.7           107 causal_forest     4     0.453    0.65  -128   225</span></span>
+<span><span class="co">#&gt; 5      1.4           107 causal_forest     5     0.013    0.99  -175   178</span></span></code></pre></div>
 <p>We can extract estimates from the <code>est</code> object. The following code shows how to extract the GATE estimates for the writing score with the causal forest algorithm.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot GATE estimates</span></span>
@@ -167,12 +167,12 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Group"</span>, y <span class="op">=</span> <span class="st">"GATE estimate"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"#4e4e4e"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#0072B2"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>, <span class="st">"#076f00"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/README-est_extract-1.png" width="80%"></p>
+<p><img src="../reference/figures/README-est_extract-1.png" width="576"></p>
 <p>We plot the estimated Area Under the Prescriptive Effect Curve for the writing score across a range of budget constraints for causal forest.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot the AUPEC </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/README-sp_plot-1.png" width="80%"></p>
+<p><img src="../reference/figures/README-sp_plot-1.png" width="576"></p>
   </main>
 </div>
 

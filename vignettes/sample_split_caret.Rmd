@@ -35,6 +35,7 @@ user_formula <- as.formula(
   "g3tlangss ~ treatment + gender + race + birthmonth + 
   birthyear + SCHLURBN + GRDRANGE + GKENRMNT + GKFRLNCH + 
   GKBUSED + GKWHITE ")
+
 ```
 
 
@@ -92,7 +93,7 @@ est_caret <- evaluate_itr(fit_caret)
 
 We can extract the training model from `caret` and check the model performance. Other functions from `caret` can be applied to the training model.
 
-```{r caret_model, message = FALSE, warning = FALSE, out.width = "80%"}
+```{r caret_model, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 4}
 # extract the final model
 caret_model <- fit_caret$estimates$models$gbm
 print(caret_model$finalModel)
@@ -116,7 +117,7 @@ summary(est_caret)
 
 We plot the estimated Area Under the Prescriptive Effect Curve for the writing score across a range of budget constraints for the gradient boosting machine.
 
-```{r sp_plot, out.width = "80%"}
+```{r sp_plot, fig.width = 6, fig.height = 4}
 # plot the AUPEC 
 plot(est_caret)
 ```
