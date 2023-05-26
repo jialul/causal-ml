@@ -41,7 +41,7 @@
     <a class="dropdown-item" href="../articles/install.html">Installation</a>
     <a class="dropdown-item" href="../articles/sample_split.html">Sample Splitting</a>
     <a class="dropdown-item" href="../articles/sample_split_caret.html">Sample Splitting with Caret</a>
-    <a class="dropdown-item" href="../articles/cv_single_alg.html.html">Cross-Validation</a>
+    <a class="dropdown-item" href="../articles/cv_single_alg.html">Cross-Validation</a>
     <a class="dropdown-item" href="../articles/cv_multiple_alg.html">Cross-Validation with Multiple Algorithms</a>
     <a class="dropdown-item" href="../articles/user_itr.html">User-Defined ITR</a>
   </div>
@@ -158,26 +158,26 @@ in <a href="https://arxiv.org/abs/2203.14511" class="external-link">Imai and Li
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── PAPE ────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1     0.66           1.4 causal_forest      0.46    0.65</span></span>
+<span><span class="co">#&gt; 1     0.35           1.3 causal_forest      0.26    0.79</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPEp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1      2.8           1.1 causal_forest       2.5   0.013</span></span>
+<span><span class="co">#&gt; 1      1.8           1.3 causal_forest       1.4    0.16</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── PAPDp ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; data frame with 0 columns and 0 rows</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── AUPEC ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;   estimate std.deviation     algorithm statistic p.value</span></span>
-<span><span class="co">#&gt; 1     0.44           1.1 causal_forest      0.41    0.68</span></span>
+<span><span class="co">#&gt; 1     0.83           1.1 causal_forest      0.79    0.43</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── GATE ────────────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt;   estimate std.deviation     algorithm group statistic p.value upper lower</span></span>
-<span><span class="co">#&gt; 1       -4           107 causal_forest     1    -0.037    0.97  -180   172</span></span>
-<span><span class="co">#&gt; 2      -20           108 causal_forest     2    -0.187    0.85  -199   158</span></span>
-<span><span class="co">#&gt; 3       47           109 causal_forest     3     0.434    0.66  -132   227</span></span>
-<span><span class="co">#&gt; 4       89           108 causal_forest     4     0.820    0.41   -89   266</span></span>
-<span><span class="co">#&gt; 5      -88           107 causal_forest     5    -0.821    0.41  -263    88</span></span></code></pre></div>
+<span><span class="co">#&gt;   estimate std.deviation     algorithm group statistic p.value  upper lower</span></span>
+<span><span class="co">#&gt; 1      177           110 causal_forest     1      1.61    0.11   -3.6   357</span></span>
+<span><span class="co">#&gt; 2     -143           107 causal_forest     2     -1.34    0.18 -319.0    33</span></span>
+<span><span class="co">#&gt; 3      -64           107 causal_forest     3     -0.60    0.55 -240.3   112</span></span>
+<span><span class="co">#&gt; 4       72           109 causal_forest     4      0.66    0.51 -107.9   252</span></span>
+<span><span class="co">#&gt; 5      -32           107 causal_forest     5     -0.30    0.76 -208.1   144</span></span></code></pre></div>
 <p>We can extract estimates from the <code>est</code> object. The
 following code shows how to extract the GATE estimates for the writing
 score with the causal forest algorithm.</p>
