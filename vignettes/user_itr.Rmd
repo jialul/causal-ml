@@ -83,7 +83,7 @@ summary(user_itr)$GATE %>%
 ```  
 
 
-We plot the estimated Area Under the Prescriptive Effect Curve for the writing score across a range of budget constraints for user defined ITR. 
+We plot the estimated Area Under the Prescriptive Effect Curve for the writing score across a range of budget constraints for user defined ITR.
 
 ```{r user_itr_aupec, fig.width = 6, fig.height = 4}
 # plot the AUPEC 
