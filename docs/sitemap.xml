@@ -4,6 +4,12 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/cv_multiple_alg.html</loc>
+  </url>
+  <url>
+    <loc>/articles/cv_single_alg.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -14,6 +20,9 @@
   </url>
   <url>
     <loc>/articles/sample_split_caret.html</loc>
+  </url>
+  <url>
+    <loc>/articles/user_itr.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
