@@ -2,6 +2,7 @@
 #' @param object An object of \code{estimate_itr} class (typically an output of \code{estimate_itr()} function).
 #' @param ... Other parameters. 
 #' @importFrom stats pnorm
+#' @import dplyr
 #' @export
 summary.itr <- function(object, ...) {
   out         <- list()
@@ -18,7 +19,7 @@ summary.itr <- function(object, ...) {
       map(., ~ as_tibble(.)) %>%
       bind_rows() %>%
       mutate(
-        statistic = pape / sd,
+        statistic = .data$pape / .data$sd,
         p.value = 2 * pnorm(abs(pape / sd), lower.tail = FALSE)
       ) %>%
       rename(
