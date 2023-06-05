@@ -59,7 +59,7 @@ summary(user_itr)
 ```
 
 
-We can extract estimates from the `user_itr` object and visualize them. The following code shows how to extract the GATE estimates for the writing score with the causal forest algorithm. 
+We can extract estimates from the `est` object. The following code shows how to extract the GATE estimates for the writing score with the causal forest algorithm. 
 
 ```{r user_itr_gate, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 # plot GATE estimates

@@ -31,12 +31,10 @@ if(cv == TRUE){
     Pval = map(
       fit$AUPEC, ~.x$aupec_cv) %>%
       bind_rows() %>%
-      mutate(Pval = paste0("AUPEC = ", round(.data$aupec, 2), " (s.e. = ", round(.data$sd, 2), ")")) %>% pull(.data$Pval))
+      mutate(Pval = paste0("AUPEC = ", round(aupec, 2), " (s.e. = ", round(sd, 2), ")")) %>% pull(Pval))
 
   Tcv = data %>% pull(treatment) %>% as.numeric()
   Ycv = data %>% pull(outcome) %>% as.numeric()
-
-  as.numeric(data$treatment)
 
   bind_rows(map(fit$AUPEC, ~.x$aupec_cv)) %>% 
     mutate(type = algorithms) %>%
@@ -44,9 +42,9 @@ if(cv == TRUE){
       map(fit$AUPEC, ~.x$outputdf)),
       by = "type"
     ) %>%
-    mutate(AUPECmin = .data$aupec.y - 1.96*.data$sd,
-          AUPECmax = .data$aupec.y + 1.96*.data$sd) %>%
-    rename(aupec = .data$aupec.y) -> data
+    mutate(AUPECmin = aupec.y - 1.96*sd,
+          AUPECmax = aupec.y + 1.96*sd) %>%
+    rename(aupec = aupec.y) -> data
   
 }
 
@@ -64,7 +62,7 @@ if(cv == FALSE & user_itr == FALSE){
     Pval = map(
       fit$AUPEC, ~.x[c('aupec', 'sd')]) %>% 
       bind_rows() %>% 
-      mutate(Pval = paste0("AUPEC = ", round(.data$aupec, 2), " (s.e. = ", round(sd, 2), ")")) %>% pull(Pval))
+      mutate(Pval = paste0("AUPEC = ", round(aupec, 2), " (s.e. = ", round(sd, 2), ")")) %>% pull(Pval))
 
   Tcv = estimate$estimates[['Tcv']] %>% as.numeric()
   Ycv = estimate$estimates[['Ycv']] %>% as.numeric()
@@ -72,11 +70,11 @@ if(cv == FALSE & user_itr == FALSE){
   map(fit$AUPEC, ~.x) %>% 
     bind_rows() %>%
     mutate(
-          aupec = .data$vec + mean(Ycv),
+          aupec = vec + mean(Ycv),
           fraction = rep(seq(1,length(Ycv))/length(Ycv), length(algorithms)),
           type = lapply(algorithms, function(x)rep(x,length(Ycv))) %>% unlist) %>% 
-    mutate(AUPECmin = .data$aupec - 1.96*sd,
-        AUPECmax = .data$aupec + 1.96*sd)  -> data          
+    mutate(AUPECmin = aupec - 1.96*sd,
+        AUPECmax = aupec + 1.96*sd)  -> data          
 }
 
 ## -----------------------------------------
@@ -92,39 +90,40 @@ if(cv == FALSE & user_itr == TRUE){
     Pval = map(
       fit$AUPEC, ~.x[c('aupec', 'sd')]) %>% 
       bind_rows() %>% 
-      mutate(Pval = paste0("AUPEC = ", round(.data$aupec, 2), " (s.e. = ", round(sd, 2), ")")) %>% pull(Pval))
+      mutate(Pval = paste0("AUPEC = ", round(aupec, 2), " (s.e. = ", round(sd, 2), ")")) %>% pull(Pval))
 
   fit$AUPEC %>% 
     bind_rows() %>%
     mutate(
-      aupec = .data$vec + mean(.data$Ycv),
+      aupec = vec + mean(Ycv),
       fraction = rep(seq(1,length(Ycv))/length(Ycv),1),
       type = lapply("user-defined ITR", function(x)rep(x,length(Ycv))) %>% unlist) %>% 
-    mutate(AUPECmin = .data$aupec - 1.96*sd,
-      AUPECmax = .data$aupec + 1.96*sd)  -> data    
+    mutate(AUPECmin = aupec - 1.96*sd,
+      AUPECmax = aupec + 1.96*sd)  -> data    
 
 }
 
 
-  ggplot(data, aes(x=fraction,y=.data$aupec,group=type)) + 
-    geom_line(alpha=0.5,colour="red") + 
-    scale_colour_few("Dark")+
-    xlab("Maximum Proportion Treated")+
-    ylab("AUPEC")+
-    facet_wrap(~type)+
-    scale_x_continuous(labels=scales::percent)+
-    scale_y_continuous(
-      limits = c(min(data$AUPECmin, na.rm = TRUE)-0.5, max(data$AUPECmax, na.rm = TRUE)+ 0.5))+ 
-    theme_few()+ 
-    geom_ribbon(
-      aes(ymin=AUPECmin, ymax=AUPECmax),fill="tomato1",alpha=0.2) +
-    geom_abline(
-      intercept = sum(Ycv*(1-Tcv))/sum(1-Tcv), slope = sum(Ycv*Tcv)/sum(Tcv)-sum(Ycv*(1-Tcv))/sum(1-Tcv),linewidth=0.5) +
-    geom_text(
-      data = graphLabels, aes(x = 0.57, y = max(data$AUPECmax, na.rm = TRUE)+0.35, label = Pval),size=3) +
-    theme(text = element_text(size=13.5),
-          axis.text = element_text(size=10),
-          strip.text = element_text(size = 13.5)) -> out
+data %>% 
+    ggplot(aes(x=fraction,y=aupec,group=type)) + 
+      geom_line(alpha=0.5,colour="red") + 
+      scale_colour_few("Dark")+
+      xlab("Maximum Proportion Treated")+
+      ylab("AUPEC")+
+      facet_wrap(~type)+
+      scale_x_continuous(labels=scales::percent)+
+      scale_y_continuous(
+        limits = c(min(data$AUPECmin, na.rm = TRUE)-0.5, max(data$AUPECmax, na.rm = TRUE)+ 0.5))+ 
+      theme_few()+ 
+      geom_ribbon(
+        aes(ymin=AUPECmin, ymax=AUPECmax),fill="tomato1",alpha=0.2) +
+      geom_abline(
+        intercept = sum(Ycv*(1-Tcv))/sum(1-Tcv), slope = sum(Ycv*Tcv)/sum(Tcv)-sum(Ycv*(1-Tcv))/sum(1-Tcv),linewidth=0.5) +
+      geom_text(
+        data = graphLabels, aes(x = 0.57, y = max(data$AUPECmax, na.rm = TRUE)+0.35, label = Pval),size=3) +
+      theme(text = element_text(size=13.5),
+            axis.text = element_text(size=10),
+            strip.text = element_text(size = 13.5)) -> out
 
 
 
